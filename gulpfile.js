@@ -7,6 +7,9 @@ var minifyHTML = require('gulp-minify-html');
 var clean = require('gulp-clean');
 var shell = require('gulp-shell');
 var runSequence = require('run-sequence');
+var imagemin = require('gulp-imagemin');
+var pngcrush = require('imagemin-pngcrush');
+var jpegtran = require('imagemin-jpegtran');
 
 gulp.task('clean', function () {
   return gulp.src('demo/build', {read: false})
@@ -45,11 +48,23 @@ gulp.task('compress-html', function() {
 });
 
 gulp.task('build', function() {
-  runSequence('clean', 'compress-scripts', 'compress-css', 'compress-html');
+  runSequence('clean', 'compress-scripts', 'compress-css', 'compress-html', 'compress-images');
 })
 
 gulp.task('watch', function() {
   gulp.watch('demo/source/**/*', ['build']);
+});
+
+
+gulp.task('compress-images', function () {
+    return gulp.src('demo/source/images/*')
+        .pipe(imagemin({
+            progressive: true,
+            optimizationLevel: 7,
+            svgoPlugins: [{removeViewBox: false}],
+            use: [pngcrush(),jpegtran({ progressive: true })]
+        }))
+        .pipe(gulp.dest('demo/build/images/'));
 });
 
 gulp.task('default', ['watch']);

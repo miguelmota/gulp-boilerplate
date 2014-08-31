@@ -5,6 +5,7 @@ A [gulp.js](http://gulpjs.com/) boilerplate that does the following:
 - Compile and compress Sass with sourcemaps
 - Concatenate and compress JavaScript with sourcemaps
 - Compress HTML
+- Compress images
 - Watch files and build
 
 # Usage
